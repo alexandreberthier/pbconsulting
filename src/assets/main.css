@@ -1,0 +1,79 @@
+@font-face {
+    font-family: Kanit;
+    font-display: swap;
+    src: url("../assets/fonts/Kanit-Medium.ttf") format("truetype");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: KanitBold;
+    font-display: swap;
+    src: url("../assets/fonts/Kanit-Medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 700;
+}
+
+:root {
+    --dark-blue: #003a80;
+    --light-gray: #F0F0F0;
+    --gray: #bebebe;
+    --white: #ffffff;
+    --dark-green: #006e3e;
+    --text-color: #333333;
+    --red: #FF0000;
+    --dark-gray: #5c5c5c;
+}
+
+body, html {
+    padding: 0;
+    margin: 0;
+    font-family: Kanit, sans-serif;
+}
+
+p,a  {
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    margin: 0;
+    font-family: KanitBold, sans-serif;
+    color: var(--dark-green)
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+.section {
+    width: calc(100% - 54px);
+}
+
+@media (min-width: 740px) {
+    .section {
+        width: 680px;
+    }
+}
+
+@media (min-width: 1200px) {
+    p,a {
+        font-size: 20px;
+    }
+
+    .section {
+        width: 1050px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .section {
+        width: 1250px;
+    }
+}
+
