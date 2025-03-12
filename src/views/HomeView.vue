@@ -14,7 +14,6 @@ import AboutSection from "@/components/sections/AboutSection.vue";
 import ServicesSection from "@/components/sections/ServicesSection.vue";
 import CustomerSection from "@/components/sections/CustomerSection.vue";
 import TeamSection from "@/components/sections/TeamSection.vue";
-import ContactSection from "@/components/sections/ContactSection.vue";
 
 </script>
 
