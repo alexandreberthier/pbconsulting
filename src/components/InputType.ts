@@ -13,8 +13,8 @@ export interface Config {
     label: string,
     type: string,
     autocomplete: string
-    validate?: () => boolean
-    error: string
+    validate?: (input: string) => boolean,
+    error?: string
 }
 
 export function validateMail(input: string) {
