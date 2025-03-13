@@ -6,18 +6,18 @@
           v-for="(service, index) in services"
           :key="service.id"
           @click="toggleDesc(index)"
-           class="service-card"
+          class="service-card"
       >
         <div class="visible">
           <div class="icon-wrapper">
             <img :src="getImage(service.icon)" alt="">
           </div>
-          <h3>{{service.heading}}</h3>
-          <p>{{service.subHeading}}</p>
+          <h3>{{ service.heading }}</h3>
+          <p>{{ service.subHeading }}</p>
         </div>
         <div v-if="currentIndex === index" class="hidden">
           <div class="divider"></div>
-          <p>{{service.hiddenText}}</p>
+          <p>{{ service.hiddenText }}</p>
         </div>
         <div class="chevron-wrapper">
           <img
@@ -108,7 +108,7 @@ function toggleDesc(index: number) {
     display: flex;
     flex-wrap: wrap;
     gap: 32px;
-   justify-content: center;
+    justify-content: center;
 
     .service-card {
       display: flex;
@@ -121,7 +121,8 @@ function toggleDesc(index: number) {
       box-sizing: border-box;
       padding: 20px;
       border-radius: 14px;
-      max-width: 390px;
+      width: unset;
+      flex: 1 1 320px;
       box-shadow: 0 6px 15px rgba(0, 110, 62, 0.25);
       transition: all 250ms ease-in-out;
 
@@ -135,7 +136,7 @@ function toggleDesc(index: number) {
         width: 100%;
         margin-top: auto;
 
-        img  {
+        img {
           width: 35px;
           height: 35px;
           transition: all 250ms ease-in-out;
@@ -196,5 +197,6 @@ function toggleDesc(index: number) {
     gap: 60px;
   }
 }
+
 
 </style>

@@ -1,55 +1,57 @@
 <template>
-  <section class="section customers">
-    <h2>Our Clients</h2>
-    <div class="content">
-      <div class="stats" ref="statsRef">
-        <div class="stat">
-          <p><span>{{ experience }}</span>+</p>
-          <p>Years experience</p>
-        </div>
-        <div class="stat">
-          <p><span>{{ clients }}</span>+</p>
-          <p>Happy customers</p>
-        </div>
-        <div class="stat">
-          <p><span>{{ successRate }}</span>%</p>
-          <p>Success rate</p>
-        </div>
-      </div>
-
-      <!-- Testimonials mit Swipe-Unterstützung -->
-      <div class="testimonials">
-        <div class="testimonials-container"
-             ref="scrollContainer"
-             @touchstart="stopAutoScroll"
-             @touchend="startAutoScroll"
-             @mousedown="stopAutoScroll"
-             @mouseup="startAutoScroll"
-             @scroll="handleScroll">
-          <div class="testimonial-slide"
-               v-for="(testimonial, index) in testimonials"
-               :key="index">
-            <p class="testimonial-text">"{{ testimonial.text }}"</p>
-            <h4>{{ testimonial.name }}</h4>
-            <p class="testimonial-position">{{ testimonial.position }}</p>
-            <p class="testimonial-resort">{{testimonial.hotel}}</p>
+  <div class="bg">
+    <section class="section customers">
+      <h2>Our Clients</h2>
+      <div class="content">
+        <div class="stats" ref="statsRef">
+          <div class="stat">
+            <p><span>{{ experience }}</span>+</p>
+            <p>Years experience</p>
+          </div>
+          <div class="stat">
+            <p><span>{{ clients }}</span>+</p>
+            <p>Happy customers</p>
+          </div>
+          <div class="stat">
+            <p><span>{{ successRate }}</span>%</p>
+            <p>Success rate</p>
           </div>
         </div>
 
-        <div class="dots">
+        <!-- Testimonials mit Swipe-Unterstützung -->
+        <div class="testimonials">
+          <div class="testimonials-container"
+               ref="scrollContainer"
+               @touchstart="stopAutoScroll"
+               @touchend="startAutoScroll"
+               @mousedown="stopAutoScroll"
+               @mouseup="startAutoScroll"
+               @scroll="handleScroll">
+            <div class="testimonial-slide"
+                 v-for="(testimonial, index) in testimonials"
+                 :key="index">
+              <p class="testimonial-text">"{{ testimonial.text }}"</p>
+              <h4>{{ testimonial.name }}</h4>
+              <p class="testimonial-position">{{ testimonial.position }}</p>
+              <p class="testimonial-resort">{{ testimonial.hotel }}</p>
+            </div>
+          </div>
+
+          <div class="dots">
           <span v-for="(_, index) in testimonials"
                 :key="index"
                 :class="{ active: index === currentIndex }"
                 @click="scrollToIndex(index)">
           </span>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import {ref, onMounted, onBeforeUnmount} from "vue";
 
 const statsRef = ref<HTMLElement | null>(null);
 const scrollContainer = ref<HTMLElement | null>(null);
@@ -59,7 +61,7 @@ const successRate = ref(0);
 const currentIndex = ref(0);
 let autoScrollInterval: number | null = null;
 
-const testimonials = ref( [
+const testimonials = ref([
   {
     name: "Piro Hernandez",
     position: "Regional Director Americas-East",
@@ -151,7 +153,7 @@ onMounted(() => {
       animateNumber(95, successRate);
       obs.disconnect();
     }
-  }, { threshold: 0.5 });
+  }, {threshold: 0.5});
   if (statsRef.value) observer.observe(statsRef.value);
 });
 
@@ -162,15 +164,20 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+
+.bg {
+  background: var(--light-gray);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .customers {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  padding: 50px 0;
-  background: var(--light-gray);
-  width: 100%;
-  overflow-x: hidden;
+  padding: 90px 0;
 }
 
 .content {
@@ -186,6 +193,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   gap: 60px;
   justify-content: center;
+  width: 100%;
 }
 
 .stat {
@@ -193,7 +201,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   gap: 4px;
   align-items: center;
-  width: 250px;
+  flex: 1 1 200px;
 }
 
 .stat span {
@@ -223,6 +231,8 @@ onBeforeUnmount(() => {
   gap: 32px;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
 }
 
 .testimonial-slide {
@@ -235,15 +245,13 @@ onBeforeUnmount(() => {
   text-align: center;
   border-radius: 8px;
   padding: 20px 40px;
-  box-shadow: 0 6px 15px rgba(0, 110, 62, 0.25);
-  width: 100%;
-  max-width: 100%;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 h4 {
   font-size: 20px;
-  color: var(--dark-blue)
+  color: var(--dark-green)
 }
 
 .testimonial-text {
@@ -260,22 +268,23 @@ h4 {
 .testimonial-resort {
   font-size: 14px;
 }
+
 .dots {
   display: flex;
-  gap:10px;
+  gap: 10px;
   margin-top: 15px;
 }
 
 .dots span {
   width: 20px;
-  height:20px;
-  background: #ddd;
+  height: 20px;
+  background: var(--gray);
   border-radius: 50%;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .dots span.active {
-  background: #333;
+  background: var(--dark-green)
 }
 </style>

@@ -27,11 +27,17 @@ export function validatePhone(input: string) {
     return phoneRegex.test(input);
 }
 
+export function validateLength(input:string){
+    return input.length > 0
+}
+
 export const inputConfig: Ref<Record<InputType, Config>> = ref({
     [InputType.Name]: {
         label: 'Name',
         type: 'text',
-        autocomplete: 'given-name'
+        autocomplete: 'given-name',
+        validate: validateLength,
+        error: 'Can`t be empty'
     },
     [InputType.Organization]: {
         label: 'Organization',
@@ -55,6 +61,8 @@ export const inputConfig: Ref<Record<InputType, Config>> = ref({
     [InputType.TextArea]: {
         label: 'Message',
         type: 'textarea',
-        autocomplete: 'off'
+        autocomplete: 'off',
+        validate: validateLength,
+        error: 'Can`t be empty'
     }
 })

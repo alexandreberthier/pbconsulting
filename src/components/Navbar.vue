@@ -4,7 +4,7 @@
         :to="{name: 'home'}"
         class="logo">
       <img
-          :src="getImage('ic_logo.png')"
+          :src="getImage('ic_logo_pb.png')"
           alt="back to home"
       >
     </router-link>
@@ -20,12 +20,29 @@
               :key="index"
               :to="{name: link.href.name, hash: link.href.hash}"
           >
-            <span>{{link.text}}</span>
+            <span>{{ link.text }}</span>
           </router-link>
         </div>
         <div
             @click="closeMenu"
             class="touch-gray">
+        </div>
+      </div>
+      <div class="language-selection">
+        <div @click="toggleLanguageOptions" class="visible">
+          <div class="icon-wrapper">
+            <img :src="getImage('ic_globe.png')" alt="">
+          </div>
+          <p>{{ selectedLanguage }}</p>
+        </div>
+        <div v-if="showLanguageOptions" class="options">
+          <p
+              v-for="(option, index) in availableLanguages"
+              :key="index"
+              @click="selectLanguage(option)"
+          >
+            {{option}}
+          </p>
         </div>
       </div>
       <div
@@ -41,7 +58,7 @@
 
 <script setup lang="ts">
 import {getImage} from "@/utils/ImageUtils.ts";
-import {type Ref, ref} from "vue";
+import {computed, type Ref, ref} from "vue";
 
 interface NavLink {
   text: string,
@@ -64,33 +81,50 @@ function closeMenu() {
 const navLinks: Ref<NavLink[]> = ref([
   {
     text: 'About',
-    href:  {
+    href: {
       name: 'home',
       hash: '#about'
     }
   },
   {
     text: 'Services',
-    href:  {
+    href: {
       name: 'home',
       hash: '#services'
     }
   },
   {
     text: 'Team',
-    href:  {
+    href: {
       name: 'home',
       hash: '#team'
     }
   },
   {
     text: 'Contact',
-    href:  {
+    href: {
       name: 'home',
       hash: '#contact'
     }
   }
 ])
+
+const selectedLanguage = ref("EN");
+const allLanguages = ["EN", "FR", "ES"];
+
+const availableLanguages = computed(() =>
+    allLanguages.filter(lang => lang !== selectedLanguage.value)
+);
+
+const showLanguageOptions = ref(false);
+function toggleLanguageOptions() {
+  showLanguageOptions.value = !showLanguageOptions.value;
+}
+
+function selectLanguage(option: string) {
+  selectedLanguage.value = option;
+  showLanguageOptions.value = false;
+}
 </script>
 
 <style scoped>
@@ -102,7 +136,6 @@ const navLinks: Ref<NavLink[]> = ref([
   padding: 6px 18px;
   width: 100%;
   height: 100px;
-
   background: var(--white);
 
   .logo {
@@ -111,7 +144,7 @@ const navLinks: Ref<NavLink[]> = ref([
     align-items: center;
 
     img {
-      width: 250px;
+      width: 200px;
       height: auto;
     }
   }
@@ -119,7 +152,7 @@ const navLinks: Ref<NavLink[]> = ref([
   .right-section {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 16px;
 
     .links-wrapper {
       display: flex;
@@ -159,7 +192,7 @@ const navLinks: Ref<NavLink[]> = ref([
               left: 0;
               width: 0;
               height: 3px;
-              background: var(--dark-green);
+              background: var(--dark-blue);
               transition: all 250ms ease;
             }
           }
@@ -181,7 +214,7 @@ const navLinks: Ref<NavLink[]> = ref([
         cursor: pointer;
       }
     }
-    
+
     .burger-menu {
       display: flex;
       justify-content: center;
@@ -189,15 +222,15 @@ const navLinks: Ref<NavLink[]> = ref([
       box-sizing: border-box;
       background: var(--light-gray);
       border-radius: 8px;
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       cursor: pointer;
       transition: all 250ms ease-in-out;
 
       span {
         width: 80%;
         height: 2px;
-        background: var(--dark-green);
+        background: var(--dark-blue);
         position: relative;
 
         &:before, &:after {
@@ -205,7 +238,7 @@ const navLinks: Ref<NavLink[]> = ref([
           content: '';
           width: 100%;
           height: 2px;
-          background: var(--dark-green);
+          background: var(--dark-blue);
           transition: all 250ms ease;
         }
 
@@ -222,6 +255,7 @@ const navLinks: Ref<NavLink[]> = ref([
 
       &.rotate {
         transform: rotate(180deg);
+
         span {
           background: transparent;
 
@@ -239,15 +273,63 @@ const navLinks: Ref<NavLink[]> = ref([
         }
       }
     }
+
+    .language-selection {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--light-gray);
+      border-radius: 8px;
+      box-sizing: border-box;
+      padding: 5px 8px;
+      position: relative;
+
+      .visible {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        height: 35px;
+
+
+        .icon-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 30px;
+            height: 30px;
+          }
+        }
+      }
+
+      .options {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        top: 105%;
+        right: 0;
+        box-sizing: border-box;
+        padding: 5px;
+        background: var(--light-gray);
+        width: 70%;
+        border-radius: 0 0 8px 8px;
+        cursor: pointer;
+      }
+    }
   }
 }
 
 @media (min-width: 740px) {
   .nav-wrapper {
     padding: 10px 22px;
+
     .logo {
       img {
-        width: 290px;
+        width: 240px;
         height: auto;
       }
     }
@@ -260,14 +342,15 @@ const navLinks: Ref<NavLink[]> = ref([
 
     .logo {
       img {
-        width: 320px;
+        width: 260px;
         height: auto;
       }
     }
+
     .right-section {
       display: flex;
       align-items: center;
-      gap: 30px;
+      gap: 90px;
 
       .links-wrapper {
         display: flex;
@@ -300,7 +383,7 @@ const navLinks: Ref<NavLink[]> = ref([
                 left: 0;
                 width: 0;
                 height: 3px;
-                background: var(--dark-green);
+                background: var(--dark-blue);
                 transition: all 250ms ease;
               }
             }

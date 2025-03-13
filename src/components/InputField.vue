@@ -1,22 +1,25 @@
 <template>
   <div class="inp-wrapper">
-    <div class="inp">
+    <div v-if="computedConfig.type === 'textarea'" class="area">
       <label :for="id">{{ computedConfig.label }}</label>
       <textarea
-          v-if="computedConfig.type === 'textarea'"
+          v-model="userInput"
           :name="computedConfig.label"
           :id="id"
           cols="30"
-          rows="10">
+          rows="8">
       </textarea>
-      <input v-else
+    </div>
+    <div v-else class="inp">
+      <label :for="id">{{ computedConfig.label }}</label>
+      <input
           v-model="userInput"
           :type="computedConfig.type"
           :name="computedConfig.label"
           :id="id"
       >
     </div>
-    <p class="error">{{ userError }}</p>
+    <p v-if="userError" class="error">{{ userError }}</p>
   </div>
 </template>
 
@@ -25,8 +28,9 @@
 import {type Config, inputConfig, type InputType} from "@/components/InputType.ts";
 import {computed, type ComputedRef, type ModelRef, watch} from "vue";
 
-const {inputType} = defineProps<{
-  inputType: InputType
+const {inputType, required} = defineProps<{
+  inputType: InputType,
+  required?: boolean
 }>()
 
 
@@ -35,27 +39,30 @@ const computedConfig: ComputedRef<Config> = computed(() => {
 })
 
 const id = computed(() => `${computedConfig.value.label}-id`)
-const dynamicInpHeight = computed(()=> {
-  return computedConfig.value.type === 'textarea' ? '150px' : '60px'
-})
-
 const userInput: ModelRef<string | undefined> = defineModel('userInput')
 const userError: ModelRef<string | undefined> = defineModel('userError')
 
+watch(userInput, (newValue) => {
+  if (!newValue?.trim()) {
+    userError.value = undefined;
+  } else {
+    validateField()
+  }
+})
 
-watch(userInput, (newVal) => {
+
+function validateField() {
   const config = computedConfig.value;
-
   if (!config.validate) return;
 
-  if (!newVal) {
-    userError.value = undefined;
-    return;
-  }
+  const input = userInput.value || '';
 
-  const input = newVal
+
   userError.value = config.validate(input) ? undefined : config.error;
-})
+}
+
+
+defineExpose({validateField})
 
 
 </script>
@@ -65,62 +72,67 @@ watch(userInput, (newVal) => {
 .inp-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   width: 100%;
   gap: 4px;
 
   .inp {
-    height: v-bind(dynamicInpHeight);
+    height: 60px;
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
 
-    label {
-      font-size: 16px;
-      position: absolute;
-      top: -13px;
-      left: 13px;
-      box-sizing: border-box;
-      background: var(--light-gray);
-      padding: 1px 5px;
-      border-radius: 4px;
-      color: var(--dark-green)
-    }
-
     input {
       height: inherit;
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid var(--dark-blue);
+      border: 1px solid var(--dark-green);
       border-radius: 4px;
       font-size: 16px;
       font-family: Kanit, sans-serif;
       padding: 0 16px;
 
       &:focus {
-        outline: 2px solid var(--dark-blue);
+        outline: 2px solid var(--dark-green);
       }
     }
+  }
+
+  label {
+    font-size: 16px;
+    position: absolute;
+    top: -13px;
+    left: 13px;
+    box-sizing: border-box;
+    background: var(--light-gray);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--dark-green)
+  }
+
+  .area {
+    position: relative;
 
     textarea {
       font-size: 16px;
       font-family: Kanit, sans-serif;
       width: 100%;
       box-sizing: border-box;
-      border: 1px solid var(--dark-blue);
+      border: 1px solid var(--dark-green);
       border-radius: 4px;
-      min-height: 180px;
       padding: 16px;
+
       &:focus {
-        outline: 2px solid var(--dark-blue);
+        outline: 2px solid var(--dark-green);
       }
     }
   }
 
+
   .error {
     font-size: 14px;
-    color: var(--red)
+    color: var(--red);
+    text-align: end;
   }
 
 }
